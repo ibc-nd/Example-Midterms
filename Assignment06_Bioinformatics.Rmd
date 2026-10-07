@@ -122,7 +122,7 @@ b) Why is building an HMM profile from multiple sequences more sensitive than us
 
 ## Submission
 
-Submit the GitHub repository URL and `assignment06_NETID.txt` by 10:00 PM on the due date. The repository must contain `run_pipeline.sh`, `pipeline_results.csv`, `README.md`, and the commit history. In the text file, include your commands, relevant outputs, explanations, and `git log --oneline`; identify both teammates and summarize each person's local and CRC contributions. Ensure all team members' latest commits have been pushed before submitting.
+Submit the GitHub repository URL and `assignment06_NETID.txt` by 10:00 PM on the due date. The repository must contain `run_pipeline.sh`, `pipeline_results.csv`, `README.md`, and the commit history. In the text file, include your commands, relevant outputs, explanations, and `git log --oneline`; this log will report each student's contributions provided you follow our commit message requirements. Ensure all team members' latest commits have been pushed before submitting.
 
 ### Checklist for submission:
 * GitHub repository URL

@@ -1,0 +1,125 @@
+---
+title: "Assignment 06 — Bioinformatics Pipeline"
+author: "BIOS 30318/60318: Introduction to Biocomputing, Fall 2026"
+date: "Week 8 | Lectures L13–L14 | Tutorial T07"
+output: pdf_document
+---
+
+# Intro to Biocomputing - Midterm Assignment 06: Bioinformatics Pipeline
+## Background
+Methanogenesis is an anaerobic microbial metabolism that results in the production of methane, a potent greenhouse gas. The microbes responsible for this process are methanogenic Archaea (methanogens), which vary across different ecosystems and are significantly influenced by the pH of the environment. 
+
+A graduate student in Dr. Mishra's lab is attempting to culture pH-resistant methanogenic Archaea from lake sediments to use in her experiments. From one enrichment, she has produced 50 different isolated colonies and wants to identify which ones are the best candidates for her growth experiments. Methanogens can be identified by the presence of the methyl-coenzyme M reductase (McrA) gene, which catalyzes the last step of methanogenesis and is highly conserved across all methanogens. pH resistance can be identified by the number of copies of the HSP70 gene, which is involved in protein biogenesis and refolding for stress resistance (Macario et al. 1999). 
+
+You have been provided the proteomes (the translated genomes) of all 50 isolates in the proteomes directory, as well as reference protein sequences for the McrA gene and the HSP70 gene. Use Unix code and bioinformatics tools to determine which isolates Dr. Mishra’s graduate student should move forward with. Provide all of the code in a single bash script. Your script should include all of the necessary steps to search each genome for the genes of interest and should produce a summary table collating the results of all searches. Your script should be efficient, flexible to inputs and outputs, and well commented. Additionally, provide a text file with the names (i.e. proteome_01) of the candidate pH-resistant methanogens based on your results. 
+## Overview
+A common task in bioinformatics is to identify candidate genes or variants of interest across multiple genomes or proteomes. This assignment will guide you through the process of building a bioinformatics pipeline to search for a gene family across multiple bacterial proteomes using sequence alignment and profile hidden Markov models (HMMs).
+
+You have been provided with a set of reference gene sequences for two genes (mcrA and HSP70), and 50 bacterial proteomes. You will use these data and two common bioinformatics tools to identify which of these proteomes come from methanogens, and further which proteomes are candidate genotypes for pH resistance. The final product for submission will be a list of your results as well as the bioinformatics pipeline used to obtain them.
+
+
+
+**Points: 50**
+* 15 points for the assignment-wide structure and goals
+* 35 points for the five exercises
+
+---
+
+## Collaboration and computing environments
+
+**Assignment-wide structure and goals (15 pts):** 
+
+Develop a reproducible, collaborative project using Git and GitHub to coordinate work across local computers and CRC. These requirements apply throughout the assignment rather than forming a separate exercise. Together with the five exercises (35 pts), they make up the 50-point total.
+
+Work in a **team of two**. Create a GitHub repository under the `ibs_nd` organization for this assignment. Both team members must contribute meaningful commits while working on **both a local computer and CRC**; push commits to GitHub regularly so the repository is the shared source of truth.
+
+Include a `README.md` in your GitHub repository with the project purpose, the commands to run your pipeline, any required software/modules, and a brief description of the results.
+
+Document that **each team member** made meaningful commits from both a local computer and CRC. When you submit a commit, begin with your name followed by the commit message. 
+```bash
+git commit -m "Neil M: Added bash script to satisy exercise 1.a. Concatenates reference sequences for a gene, then uses muscle to build an MSA."
+```
+You should also include the GitHub repository URL and the output of `git log --oneline` in your submission. 
+Use this workflow to get started:
+
+1. Create the repository on GitHub (The repo name should be "Midterm-Student1-Student2"), then clone it to your local computer:
+
+   ```bash
+   git clone https://github.com/ibs_nd/REPOSITORY_NAME.git
+   cd REPOSITORY_NAME
+   ```
+
+2. Connect to CRC and clone the same repository there:
+
+   ```bash
+   ssh NETID@crcfe0X.crc.nd.edu
+   git clone https://github.com/ibs_nd/REPOSITORY_NAME.git
+   cd REPOSITORY_NAME
+   module load bio
+   ```
+
+   Replace `NETID`, `crcfe0X`, and `REPOSITORY_NAME` with your account, assigned CRC login node, and repository name. If the repository is private, configure GitHub access on CRC using the course instructions; do not put passwords, tokens, or private keys in the repository.
+
+3. Before starting work in either environment, synchronize with GitHub. Commit and push your changes when a meaningful piece of work is complete:
+
+   ```bash
+   git pull
+   git status
+   git add README.md run_pipeline.sh pipeline_results.csv
+   git commit -m "Name: Add pipeline and proteome results"
+   git push
+   ```
+
+   Add other assignment files as appropriate. Before pushing, pull any commits made by your teammate. Avoid committing temporary pipeline files or other generated intermediates.
+
+Keep the project files in the repository and use the same repository on your local computer and CRC. The CRC workflow uses the `bio` module for `muscle` and `hmmer`; after loading it, check the loaded module with `module list` and confirm the tools are available with `which muscle`, `which hmmbuild`, and `which hmmsearch`.
+
+---
+
+## Software
+
+You will use **muscle** for multiple sequence alignment and **hmmer** (hmmbuild + hmmsearch) for profile-based sequence searching. The reference sequences and proteomes are available in the `bioinformatics_project/` directory.
+
+---
+
+## Exercises
+
+### 1 (5 pts)
+a) Select a set of reference sequences from the `ref_sequences/` directory. Use `muscle` to create a multiple sequence alignment. Show the command and briefly describe the output format.
+
+b) Use `hmmbuild` to build an HMM profile from your alignment. Report the command and the name of your profile.
+
+### 2 (5 pts)
+a) Use `hmmsearch` to search your HMM profile against **one** proteome from the `proteomes/` directory. Save the output with `--tblout`.
+
+b) Examine the output. How many significant hits (E-value < 0.001) did you find? Show the `grep` or `awk` command used to filter.
+
+c) Explain in 2–3 sentences what the E-value represents and why we use a threshold.
+
+### 3 (10 pts)
+Write a bash script called `run_pipeline.sh` that:
+
+1. Takes a reference FASTA file and a directory of proteome files as arguments
+2. Builds the alignment and HMM profile
+3. Searches **every** proteome in the directory
+4. Outputs a CSV file `pipeline_results.csv` with columns: `proteome,num_hits`
+
+Include error checking (e.g., verify files exist). Test on at least 5 proteomes.
+
+### 4 (5 pts)
+a) Run your pipeline on all proteomes in the `proteomes/` directory.
+
+b) Which proteome had the most hits? Which had the fewest (or zero)?
+
+c) What biological question could the variation in hit counts answer?
+
+### 5 (10 pts)
+a) Describe the difference between **pairwise alignment** and **profile-based searching**. When would you use each?
+
+b) Why is building an HMM profile from multiple sequences more sensitive than using a single sequence as a BLAST query?
+
+---
+
+## Submission
+
+Submit the GitHub repository URL and `assignment06_NETID.txt` by 10:00 PM on the due date. The repository must contain `run_pipeline.sh`, `pipeline_results.csv`, `README.md`, and the commit history. In the text file, include your commands, relevant outputs, explanations, and `git log --oneline`; identify both teammates and summarize each person's local and CRC contributions. Ensure all team members' latest commits have been pushed before submitting.

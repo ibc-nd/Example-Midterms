@@ -123,3 +123,10 @@ b) Why is building an HMM profile from multiple sequences more sensitive than us
 ## Submission
 
 Submit the GitHub repository URL and `assignment06_NETID.txt` by 10:00 PM on the due date. The repository must contain `run_pipeline.sh`, `pipeline_results.csv`, `README.md`, and the commit history. In the text file, include your commands, relevant outputs, explanations, and `git log --oneline`; identify both teammates and summarize each person's local and CRC contributions. Ensure all team members' latest commits have been pushed before submitting.
+
+### Checklist for submission:
+* GitHub repository URL
+* `assignment06_NETID.txt` with the specific commands and outputs requested by each exercise.
+* `run_pipeline.sh` script. This should be well commented and include a header comment explaining usage. Example: "\#Usage: bash run_pipeline.sh" If your script requires arguments, specify them in the header comment.
+   * This script should go from the reference sequences to the final results, including alignment, HMM building, and searching all proteomes. Then processing the results into a csv table.
+* `pipeline_results.csv` with the results of your pipeline. This should report the proteome #, and the number of hits for each gene of interest within that proteome. Filtered to only contain the strains relevant for the graduate student's experiments (i.e., those with hits for both genes of interest).
